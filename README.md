@@ -4,5 +4,4 @@ Winter 2023
 
 Note to self :  
   Day 3 - Task 2  
-    Implement a new controller and class (For StarSystem)  
-    Connect database to existing code using Ado.Net  
+    Connect SQL database to existing code controllers using Ado.Net (having some trouble here)  
