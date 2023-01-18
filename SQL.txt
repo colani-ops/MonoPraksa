@@ -1,0 +1,98 @@
+--StarSystem (1) : Star (1)
+--StarSystem (1) : Planet (N)
+--M : N (Zasad ne znam kako ubaciti u ovom kontekstu da ima smisla)
+
+--Razmišljao sam dodati za Star i Planet CHECK-ove za određene tipove planeta i zvijezda ali
+--bih si zakomplicirao :]
+
+
+
+--StarSystem
+
+USE [Planets]
+
+CREATE TABLE StarSystem (
+	Id INT NOT NULL PRIMARY KEY,
+	Name VARCHAR(30) NOT NULL,
+);
+GO
+
+
+
+--Star
+
+USE [Planets]
+
+CREATE TABLE Star (
+	Id INT NOT NULL PRIMARY KEY,
+	Name VARCHAR(30) NOT NULL,
+	Type VARCHAR(20) NOT NULL,
+	Radius INT NOT NULL,
+
+	CONSTRAINT IdFK FOREIGN KEY(Id) REFERENCES StarSystem(Id)
+);
+
+
+
+--Planet
+
+USE [Planets]
+
+CREATE TABLE Planet 
+(
+	Id INT NOT NULL PRIMARY KEY,
+	Name VARCHAR(30) NOT NULL,
+	Type VARCHAR(20) NOT NULL,
+	Radius INT NOT NULL,
+	EquadorLength INT NOT NULL,
+	StarSystem INT NOT NULL,
+	
+	HasSatelite BIT CHECK (HasSatelite = '1' or HasSatelite = '0'),
+	HasRing BIT CHECK (HasRing = '1' or HasRing = '0'),
+
+	CONSTRAINT StarSystemFK FOREIGN KEY(StarSystem) REFERENCES StarSystem(ID)
+);
+GO
+
+
+
+
+
+--Alter, Select, Delete, Insert, Update, Order By, Where
+
+USE [Planets]
+
+ALTER TABLE StarSystem ALTER COLUMN Name VARCHAR(40);
+ALTER TABLE Star ALTER COLUMN Name VARCHAR(40);
+
+INSERT INTO StarSystem VALUES ('1', 'Solar System');
+ALTER TABLE Star ALTER COLUMN Radius DECIMAL(12,2);
+
+ALTER TABLE Planet DROP COLUMN EquadorLength;
+ALTER TABLE Planet ALTER COLUMN Radius DECIMAL(8,2);
+ALTER TABLE Planet ADD Gravity DECIMAL (4,2);
+
+UPDATE Star SET Radius = '696340' WHERE Id='1';
+
+ALTER TABLE Planet ALTER COLUMN Radius DECIMAL(8,2);
+ALTER TABLE Planet ALTER COLUMN Gravity DECIMAL(4,2);
+
+INSERT INTO Planet VALUES (1, 'Mercury', 'Rocky', 2439.7, 1, 0, 0, 3.7);
+INSERT INTO Planet VALUES (2, 'Venus', 'Rocky', 6051.8, 1, 0, 0, 8.87);
+INSERT INTO Planet VALUES (3, 'Earth', 'Rocky', 6371, 1, 1, 0, 9.81);
+INSERT INTO Planet VALUES (4, 'Mars', 'Rocky', 3389.5, 1, 0, 0, 3.72);
+
+
+
+SELECT Name FROM Planet
+SELECT * FROM Planet WHERE Name = 'Earth'
+SELECT * FROM Planet WHERE Radius >= 6000.00
+SELECT * FROM Planet WHERE HasSatelite = 1
+SELECT Name FROM Planet WHERE Name LIKE '%a%'
+SELECT Name, Radius FROM Planet ORDER BY Radius DESC;
+
+DELETE FROM Planet WHERE Name = 'Venus';
+SELECT * FROM Planet;
+INSERT INTO Planet VALUES (22, 'Venus', 'Rocky', 6051.8, 1, 0, 0, 8.87);
+UPDATE Planet SET Id = 2 WHERE Name = 'Venus';
+SELECT * FROM Planet;
