@@ -11,7 +11,7 @@ namespace Planets.WebAPI.Controllers
     public class PlanetController : ApiController
     {
 
-        static List<Planet> PlanetsList = new List<Planet>();
+        public static List<Planet> PlanetsList = new List<Planet>();
 
         /*public string Get()
         {
@@ -37,7 +37,7 @@ namespace Planets.WebAPI.Controllers
         [Route("api/Planet/search-planet-id/{TargetID}")]
         public HttpResponseMessage SearchPlanetId(int TargetID)
         {
-            Planet tempPlanet = PlanetsList.Find(Planet => Planet.BodyID == TargetID);
+            Planet tempPlanet = PlanetsList.Find(Planet => Planet.Id == TargetID);
 
             if(PlanetsList == null)
             {
@@ -53,12 +53,12 @@ namespace Planets.WebAPI.Controllers
         [Route("api/Planet/add-planet-to-list")]
         public HttpResponseMessage AddPlanet([FromBody]Planet inputPlanet)
         {
-            if (inputPlanet.Name == null || inputPlanet.Type == null || inputPlanet.Radius == 0 || inputPlanet.EquadorLength == 0)
+            if (inputPlanet.Name == null || inputPlanet.Type == null || inputPlanet.Radius == 0 || inputPlanet.Gravity == 0)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, inputPlanet.BodyID);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, inputPlanet.Id);
             }
 
-            inputPlanet.BodyID = PlanetsList.Last().BodyID + 1;
+            inputPlanet.Id = PlanetsList.Last().Id + 1;
             PlanetsList.Add(inputPlanet);
 
             return Request.CreateResponse(HttpStatusCode.OK);           
@@ -70,16 +70,16 @@ namespace Planets.WebAPI.Controllers
         public HttpResponseMessage Update(int TargetID, Planet updatedPlanet)
         {
 
-            Planet tempPlanet = PlanetsList.Find(Planet => Planet.BodyID == TargetID);
+            Planet tempPlanet = PlanetsList.Find(Planet => Planet.Id == TargetID);
 
             if(tempPlanet == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound, TargetID);
             
-            } else if (updatedPlanet.Name == null || updatedPlanet.Type == null || updatedPlanet.Radius == 0 || updatedPlanet.EquadorLength == 0)
+            } else if (updatedPlanet.Name == null || updatedPlanet.Type == null || updatedPlanet.Radius == 0 || updatedPlanet.Gravity == 0)
             {
 
-                return Request.CreateResponse(HttpStatusCode.BadRequest, updatedPlanet.BodyID);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, updatedPlanet.Id);
             }
 
             PlanetsList.RemoveAt(TargetID);
@@ -93,7 +93,7 @@ namespace Planets.WebAPI.Controllers
         [Route("api/Planet/delete-by-id/{TargetID}")]
         public HttpResponseMessage Delete(int TargetID)
         {
-            Planet tempPlanet = PlanetsList.Find(Planet => Planet.BodyID == TargetID);
+            Planet tempPlanet = PlanetsList.Find(Planet => Planet.Id == TargetID);
 
             if (PlanetsList != null)
             {
