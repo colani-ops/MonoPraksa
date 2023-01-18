@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.EnterpriseServices;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -34,57 +35,74 @@ namespace Planets.WebAPI.Controllers
         // GET: api/Planet/search-planet-id/{TargetID}
         [HttpGet]
         [Route("api/Planet/search-planet-id/{TargetID}")]
-        public Planet SearchPlanetId(int TargetID)
+        public HttpResponseMessage SearchPlanetId(int TargetID)
         {
+            Planet tempPlanet = PlanetsList.Find(Planet => Planet.BodyID == TargetID);
+
             if(PlanetsList == null)
             {
-                return null;
+                return Request.CreateResponse(HttpStatusCode.NotFound, TargetID);
             }
-            
-            return PlanetsList.Find(Planet => Planet.BodyID == TargetID);
+
+            return Request.CreateResponse(HttpStatusCode.OK, TargetID);
 
         }
 
         // POST: api/Planet/add-planet-to-list
         [HttpPost]
         [Route("api/Planet/add-planet-to-list")]
-        public void Post(string Name, string Type, int Radius, int EquadorLength, int BodyID)
+        public HttpResponseMessage AddPlanet([FromBody]Planet inputPlanet)
         {
-            Planet inputPlanet = new Planet();
+            if (inputPlanet.Name == null || inputPlanet.Type == null || inputPlanet.Radius == 0 || inputPlanet.EquadorLength == 0)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, inputPlanet.BodyID);
+            }
 
-            inputPlanet.Name = Name;
-            inputPlanet.Type = Type;
-            inputPlanet.Radius = Radius;
-            inputPlanet.EquadorLength = EquadorLength;
-            inputPlanet.BodyID = BodyID;
-
+            inputPlanet.BodyID = PlanetsList.Last().BodyID + 1;
             PlanetsList.Add(inputPlanet);
+
+            return Request.CreateResponse(HttpStatusCode.OK);           
         }
-
-        //ID has to be unique, add ID-Checker!!!
-
 
         // PUT: api/Planet/update-planet-by-id/{TargetID}
         [HttpPut]
         [Route("api/Planet/update-planet-by-id/{TargetID}")]
-        public void Put(int TargetID)
+        public HttpResponseMessage Update(int TargetID, Planet updatedPlanet)
         {
+
+            Planet tempPlanet = PlanetsList.Find(Planet => Planet.BodyID == TargetID);
+
+            if(tempPlanet == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, TargetID);
+            
+            } else if (updatedPlanet.Name == null || updatedPlanet.Type == null || updatedPlanet.Radius == 0 || updatedPlanet.EquadorLength == 0)
+            {
+
+                return Request.CreateResponse(HttpStatusCode.BadRequest, updatedPlanet.BodyID);
+            }
+
+            PlanetsList.RemoveAt(TargetID);
+            PlanetsList.Insert(TargetID, updatedPlanet);
+            return Request.CreateResponse(HttpStatusCode.OK);
 
         }
 
         // DELETE: api/Planet/delete-by-id/{TargetID}
         [HttpDelete]
         [Route("api/Planet/delete-by-id/{TargetID}")]
-        public string Delete(int TargetID)
+        public HttpResponseMessage Delete(int TargetID)
         {
+            Planet tempPlanet = PlanetsList.Find(Planet => Planet.BodyID == TargetID);
+
             if (PlanetsList != null)
             {
-                PlanetsList.Remove(PlanetsList.Where(Planet => Planet.BodyID==TargetID).FirstOrDefault());
-
-                return "Successfully deleted the planet with the inputed ID!" +TargetID;
-            }else
+                PlanetsList.RemoveAt(TargetID);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            else
             {
-                return "List is empty!";
+                return Request.CreateResponse(HttpStatusCode.NotFound, TargetID);
             }
         }
     }
