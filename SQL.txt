@@ -1,0 +1,55 @@
+--StarSystem (1) : Star (1)
+--StarSystem (1) : Planet (N)
+--M : N (Zasad ne znam kako ubaciti u ovom kontekstu da ima smisla)
+
+--Razmišljao sam dodati za Star i Planet CHECK-ove za određene tipove planeta i zvijezda ali
+--bih si zakomplicirao :]
+
+
+
+--StarSystem
+
+USE [Planets]
+
+CREATE TABLE StarSystem (
+	Id INT NOT NULL PRIMARY KEY,
+	Name VARCHAR(30) NOT NULL,
+);
+GO
+
+
+
+--Star
+
+USE [Planets]
+
+CREATE TABLE Star (
+	Id INT NOT NULL PRIMARY KEY,
+	Name VARCHAR(30) NOT NULL,
+	Type VARCHAR(20) NOT NULL,
+	Radius INT NOT NULL,
+
+	CONSTRAINT IdFK FOREIGN KEY(Id) REFERENCES StarSystem(Id)
+);
+
+
+
+--Planet
+
+USE [Planets]
+
+CREATE TABLE Planet 
+(
+	Id INT NOT NULL PRIMARY KEY,
+	Name VARCHAR(30) NOT NULL,
+	Type VARCHAR(20) NOT NULL,
+	Radius INT NOT NULL,
+	EquadorLength INT NOT NULL,
+	StarSystem INT NOT NULL,
+	
+	HasSatelite BIT CHECK (HasSatelite = '1' or HasSatelite = '0'),
+	HasRing BIT CHECK (HasRing = '1' or HasRing = '0'),
+
+	CONSTRAINT StarSystemFK FOREIGN KEY(StarSystem) REFERENCES StarSystem(ID)
+);
+GO
