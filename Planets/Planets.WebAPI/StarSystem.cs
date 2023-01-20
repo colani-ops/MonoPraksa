@@ -7,13 +7,23 @@ namespace Planets.WebAPI
 {
     public class StarSystem
     {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        private List<Planet> PlanetList { get { return PlanetList; } } //List of planets in the Star System
+
+
+
         public StarSystem() 
         { 
             //Constructor
         }
 
-        public int Id { get; set; }
-        public string Name { get; set; }
-        List<Planet> PlanetList { get; set; } //List of planets in the Star System
+        public StarSystem(Guid iId, string Name)
+        {
+            this.Id = Id;
+            this.Name = Name;
+        }
+
+        
     }
 }
