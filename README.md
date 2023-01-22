@@ -1,7 +1,10 @@
 # MonoPraksa
 Winter 2023
 
+To do :
 
-Note to self :  
-  Day 3 - Task 2  
-    Connect SQL database to existing code controllers using Ado.Net (having some trouble here)  
+1. Fix check methods (Post, Delete, Update) in PlanetController
+
+2. Start and Finish (3x Get, Post, Update, Delete) in StarSystemController
+
+3. Multilayering
