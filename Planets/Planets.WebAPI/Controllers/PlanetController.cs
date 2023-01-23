@@ -13,7 +13,10 @@ namespace Planets.WebAPI.Controllers
 {
     public class PlanetController : ApiController
     {
+
         string connectionString = "server = localhost; database = Planets; trusted_connection=true";
+
+
 
         // GET: api/Planet/get-planet-list
         [HttpGet]
@@ -91,8 +94,8 @@ namespace Planets.WebAPI.Controllers
 
         // POST: api/Planet/add-planet-to-list
         [HttpPost]
-        [Route("api/Planet/add-planet-to-list")]
-        public HttpResponseMessage AddPlanet([FromBody] Planet inputPlanet)
+        [Route("api/Planet/add-planet")]
+        public HttpResponseMessage AddPlanet([FromBody] Planet inputPlanet) //use Sql Insert Parameters
         {
                 if (inputPlanet.Name == null || inputPlanet.Type == null || inputPlanet.Radius == 0 || inputPlanet.Gravity == 0 || inputPlanet.StarSystemID == null)
                 {
@@ -101,8 +104,10 @@ namespace Planets.WebAPI.Controllers
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
+                var id = Guid.NewGuid();
+
                     SqlCommand command = new SqlCommand(
-                    "INSERT INTO Planet (Id, Name, Type, Radius, Gravity, StarSystemID) VALUES (default, '"+inputPlanet.Name+"', '"+inputPlanet.Type+"', "
+                    "INSERT PA INTO Planet (Id, Name, Type, Radius, Gravity, StarSystemID) VALUES ( '"+inputPlanet.Name+"', '"+inputPlanet.Type+"', "
                                         +inputPlanet.Radius+", "+inputPlanet.Gravity+", '"+inputPlanet.StarSystemID+"');", connection
                     );
 
@@ -124,7 +129,7 @@ namespace Planets.WebAPI.Controllers
 
         // PUT: api/Planet/update-planet-by-id/{TargetID}
         [HttpPut]
-        [Route("api/Planet/update-planet-by-id/{TargetID}")]
+        [Route("api/Planet/update-planet-by-id/{targetID}")]
         public HttpResponseMessage Update(Guid targetID, [FromBody] Planet updatedPlanet)
         {
             if (updatedPlanet.Id == null || updatedPlanet.Type == null || updatedPlanet.Radius == 0 || updatedPlanet.Gravity == 0 || updatedPlanet.StarSystemID == null)
@@ -166,7 +171,7 @@ namespace Planets.WebAPI.Controllers
 
         // DELETE: api/Planet/delete-by-id/{targetID}
         [HttpDelete]
-        [Route("api/Planet/delete-by-id/{targetID}")]
+        [Route("api/Planet/delete-planet-by-id/{targetID}")]
         public HttpResponseMessage Delete(Guid targetID)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))

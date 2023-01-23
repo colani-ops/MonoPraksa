@@ -18,7 +18,7 @@ namespace Planets.WebAPI
             //Constructor
         }
 
-        public StarSystem(Guid iId, string Name)
+        public StarSystem(Guid Id, string Name)
         {
             this.Id = Id;
             this.Name = Name;

@@ -121,7 +121,7 @@ namespace Planets.WebAPI.Controllers
 
 
 
-        [HttpPost] //POST (Add StarSystem) Here
+        /*[HttpPost] //POST (Add StarSystem) Here
         [Route("api/Planet/add-starsystem")]
         public HttpResponseMessage AddStarSystem() 
         {
@@ -144,6 +144,6 @@ namespace Planets.WebAPI.Controllers
         public HttpResponseMessage DeleteStarSystem(Guid targetId)
         {
 
-        }
+        }*/
     }
 }
