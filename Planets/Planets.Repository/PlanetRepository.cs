@@ -20,7 +20,7 @@ namespace Planets.Repository
 
 
 
-        public List<Planet> Get()
+        public List<Planet> GetPlanetList()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

@@ -11,7 +11,7 @@ namespace Planets.Repository.Common
 {
     public interface IPlanetRepository
     {
-        List<Planet> Get();
+        List<Planet> GetPlanetList();
         Planet SearchPlanetId(Guid targetId);
         void AddPlanet(Planet inputPlanet);
         bool UpdatePlanet(Guid targetID, Planet updatedPlanet);
