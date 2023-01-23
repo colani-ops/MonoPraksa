@@ -5,8 +5,8 @@ To do :
 
 1. Fix check methods (Post, Delete, Update) in PlanetController
 
-(2. Start and Finish (3x Get, Post, Update, Delete) in StarSystemController)
+2. Multilayering
 
-3. Multilayering
+3. Async programming
 
-4. Async programming
+4.(Start and Finish (3x Get, Post, Update, Delete) in StarSystemController) - not priority
