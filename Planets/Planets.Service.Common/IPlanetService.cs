@@ -11,7 +11,7 @@ namespace Planets.Service.Common
 {
     public interface IPlanetService
     {
-        List<Planet> GetPlanetlist();
+        List<Planet> GetPlanetList(); 
         Planet SearchPlanetId(Guid targetID);
         void AddPlanet(Planet inputPlanet);
         bool UpdatePlanet(Guid targetId, Planet updatedPlanet);

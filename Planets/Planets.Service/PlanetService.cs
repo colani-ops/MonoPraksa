@@ -15,27 +15,27 @@ namespace Planets.Service
     {
         PlanetRepository planetRepository = new PlanetRepository();
 
-        public List<Planet> GetPlanetlist()
+        public List<Planet> GetPlanetList() //turn into async, add await
         {
             return planetRepository.GetPlanetList();
         }
 
-        public Planet SearchPlanetId(Guid targetID)
+        public Planet SearchPlanetId(Guid targetID) //turn into async, add await
         {
             return planetRepository.SearchPlanetId(targetID);
         }
 
-        public void AddPlanet(Planet inputPlanet)
+        public void AddPlanet(Planet inputPlanet) //turn into async, add await
         {
             planetRepository.AddPlanet(inputPlanet);
         }
 
-        public bool UpdatePlanet(Guid targetId, Planet updatedPlanet)
+        public bool UpdatePlanet(Guid targetId, Planet updatedPlanet) //turn into async, add await
         {
             return planetRepository.UpdatePlanet(targetId, updatedPlanet);
         }
 
-        public bool DeletePlanet(Guid targetId)
+        public bool DeletePlanet(Guid targetId) //turn into async, add await
         {
             return planetRepository.DeletePlanet(targetId);
         }

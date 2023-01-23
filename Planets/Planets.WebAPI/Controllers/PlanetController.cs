@@ -1,5 +1,6 @@
 ﻿using Planets.WebAPI.Models;
 using Planets.Service;
+using Planets.Model;
 using System;
 using System.Collections.Generic;
 using System.EnterpriseServices;
@@ -18,41 +19,30 @@ namespace Planets.WebAPI.Controllers
     public class PlanetController : ApiController
     {
 
-        string connectionString = "server = localhost; database = Planets; trusted_connection=true";
+        //string connectionString = "server = localhost; database = Planets; trusted_connection=true";
 
+        PlanetService planetService = new PlanetService();
 
 
         // GET: api/Planet/get-planet-list
         [HttpGet]
         [Route("api/Planet/get-planet-list")]
-        public HttpResponseMessage Get()
+        public HttpResponseMessage GetPlanetList()
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            List<Planet> planetList = planetService.GetPlanetList();
+
+            List<PlanetRest> planetRestList = new List<PlanetRest>();
+
+            foreach(Planet planet in planetList)
             {
-
-                SqlCommand command = new SqlCommand(
-                    "SELECT * FROM dbo.Planet", connection
-                );
-
-                List<PlanetRest> planetList = new List<PlanetRest>();
-
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-
-                    while (reader.Read())
-                    {
-                        planetList.Add(new PlanetRest(reader.GetGuid(0), reader.GetString(1), reader.GetString(2),
-                                                  reader.GetDecimal(3), reader.GetDecimal(4), reader.GetGuid(5)));
-                    }
-                    connection.Close();
-                    return Request.CreateResponse(HttpStatusCode.OK, planetList);
-                }
-                return Request.CreateResponse(HttpStatusCode.NotFound, "No planets found");
+                planetRestList.Add(new PlanetRest(planet));
             }
+            if (planetRestList == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No planets loaded");
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, planetRestList);
         }
 
 
@@ -62,157 +52,73 @@ namespace Planets.WebAPI.Controllers
         [Route("api/Planet/search-planet-id/{targetID}")]
         public HttpResponseMessage SearchPlanetId(Guid targetID)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+
+            Planet targetPlanet = planetService.SearchPlanetId(targetID);
+
+            PlanetRest targetPlanetRest = new PlanetRest(targetPlanet);
+
+            if(targetPlanetRest == null)
             {
-
-                SqlCommand command = new SqlCommand(
-                "SELECT * FROM dbo.Planet WHERE Id = '" + targetID + "'", connection
-                );
-
-                List<PlanetRest> planetList = new List<PlanetRest>();
-
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-
-                    while (reader.Read())
-                    {
-                        planetList.Add(new PlanetRest(reader.GetGuid(0), reader.GetString(1), reader.GetString(2),
-                                                  reader.GetDecimal(3), reader.GetDecimal(4), reader.GetGuid(5)));
-                    }
-
-                    connection.Close();
-                    return Request.CreateResponse(HttpStatusCode.OK, planetList);
-
-                }
-
-                return Request.CreateResponse(HttpStatusCode.NotFound, "No planets found");
-
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No Planet with that ID");
             }
+            return Request.CreateResponse(HttpStatusCode.OK, targetPlanetRest);
         }
 
 
 
-        // POST: api/Planet/add-planet-to-list
+        // POST: api/Planet/add-planet
         [HttpPost]
         [Route("api/Planet/add-planet")]
-        public HttpResponseMessage AddPlanet([FromBody] PlanetRest inputPlanet)
+        public HttpResponseMessage AddPlanet([FromBody] PlanetRest inputPlanetRest)
         {
-                if (inputPlanet.Name == null || inputPlanet.Type == null || inputPlanet.Radius == 0 || inputPlanet.Gravity == 0 || inputPlanet.StarSystemID == null)
-                {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Check inputed parameters");
-                }
+            //Could turn this into a seperate method
+            if (inputPlanetRest.Name == null || inputPlanetRest.Type == null || inputPlanetRest.Radius == 0 || inputPlanetRest.Gravity == 0 || inputPlanetRest.StarSystemID == null)
+            {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Check inputed parameters!");
+            }
+                
 
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
+            Planet inputPlanet = new Planet(inputPlanetRest.Id, inputPlanetRest.Name, inputPlanetRest.Type, inputPlanetRest.Radius, inputPlanetRest.Gravity, inputPlanetRest.StarSystemID);
+            planetService.AddPlanet(inputPlanet);
 
-                var id = Guid.NewGuid();
-
-                string commandString = "INSERT INTO dbo.Planet (Id, Name, Type, Radius, Gravity, StarSystemID) VALUES (@Id, @Name, @Type, @Radius, @Gravity, @StarSystemID);";
-
-                SqlCommand command = new SqlCommand(commandString, connection);
-
-                connection.Open();
-
-                command.Parameters.AddWithValue("@Id", id);
-                command.Parameters.AddWithValue("@Name", inputPlanet.Name);
-                command.Parameters.AddWithValue("@Type", inputPlanet.Type);
-                command.Parameters.AddWithValue("@Radius", inputPlanet.Radius);
-                command.Parameters.AddWithValue("@Gravity", inputPlanet.Gravity);
-                command.Parameters.AddWithValue("@StarSystemID", inputPlanet.StarSystemID);
-
-                command.ExecuteNonQuery();
-
-                connection.Close();
-
-                }
-
-                return Request.CreateResponse(HttpStatusCode.OK, "Successfully added the planet!");
+            return Request.CreateResponse(HttpStatusCode.OK, "Successfully added the planet!");
         }
 
 
 
-        // PUT: api/Planet/update-planet-by-id/{TargetID}
+        // PUT: api/Planet/update-planet-by-id/{targetID}
         [HttpPut]
         [Route("api/Planet/update-planet-by-id/{targetID}")]
-        public HttpResponseMessage Update(Guid targetID, [FromBody] PlanetRest updatedPlanet)
+        public HttpResponseMessage Update(Guid targetID, [FromBody] PlanetRest updatedPlanetRest)
         {
-            if (updatedPlanet.Id == null || updatedPlanet.Type == null || updatedPlanet.Radius == 0 || updatedPlanet.Gravity == 0 || updatedPlanet.StarSystemID == null)
+            //Could turn this into a seperate method
+            if (updatedPlanetRest.Id == null || updatedPlanetRest.Type == null || updatedPlanetRest.Radius == 0 || updatedPlanetRest.Gravity == 0 || updatedPlanetRest.StarSystemID == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Check inputed parameters");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Check inputed parameters!");
             }
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            Planet updatedPlanet = new Planet(updatedPlanetRest.Id, updatedPlanetRest.Name, updatedPlanetRest.Name, updatedPlanetRest.Radius, updatedPlanetRest.Gravity, updatedPlanetRest.StarSystemID);
+            
+            if (planetService.UpdatePlanet(targetID, updatedPlanet))
             {
-
-                SqlCommand command = new SqlCommand("UPDATE dbo.Planet SET Name = @Name, Type = @Type, Radius = @Radius, Gravity = @Gravity WHERE Id = '" + targetID + "';", connection);
-
-                SqlCommand commandCheck = new SqlCommand("SELECT * FROM dbo.Planet WHERE Id = '" + targetID + "';", connection);
-
-                connection.Open();
-
-                SqlDataReader reader = commandCheck.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-                    reader.Close();
-
-                    command.Parameters.AddWithValue("@Name", updatedPlanet.Name);
-                    command.Parameters.AddWithValue("@Type", updatedPlanet.Type);
-                    command.Parameters.AddWithValue("@Radius", updatedPlanet.Radius);
-                    command.Parameters.AddWithValue("@Gravity", updatedPlanet.Gravity);
-                    command.Parameters.AddWithValue("@StarSystemID", updatedPlanet.StarSystemID);
-
-                    command.ExecuteNonQuery();
-                    
-                    connection.Close();
-
-                    return Request.CreateResponse(HttpStatusCode.OK, "Update Successful!");
-                }
-                    connection.Close();
-                    
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No Planet found with that ID");
+                return Request.CreateResponse(HttpStatusCode.OK, "Update Successful!");
             }
+            return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No planet with that ID!");           
         }
+
+
 
         // DELETE: api/Planet/delete-by-id/{targetID}
         [HttpDelete]
         [Route("api/Planet/delete-planet-by-id/{targetID}")]
         public HttpResponseMessage Delete(Guid targetID)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+
+            if (planetService.DeletePlanet(targetID))
             {
-                SqlCommand command = new SqlCommand("DELETE FROM dbo.Planet WHERE Id = '" +targetID+ "' ;", connection);
-                
-                SqlCommand commandCheck = new SqlCommand("SELECT * FROM dbo.Planet WHERE Id = '" + targetID + "' ;", connection);
-
-                connection.Open();
-
-                SqlDataReader reader = commandCheck.ExecuteReader();
-                
-                if (reader.HasRows)
-                {
-                    reader.Close();
-
-                    reader = command.ExecuteReader();
-                    
-                    reader.Read();
-                    
-                    reader.Close();
-                    
-                    connection.Close();
-
-                    return Request.CreateResponse(HttpStatusCode.OK, "Deletion successful!");
-
-                }
-                
-                connection.Close();
-                
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No planet with that ID");
+                return Request.CreateResponse(HttpStatusCode.OK, "Deletion successful!");
             }
+            return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No planet with that ID!");
         }
     }
 }

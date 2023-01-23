@@ -24,19 +24,14 @@ namespace Planets.WebAPI.Models
         public decimal Radius { get { return radius; }  set { radius = value; } }
         public decimal Gravity { get { return gravity; } set { gravity = value; } }
         public Guid StarSystemID { get { return starSystemID; } set {starSystemID= value; } }
-        public PlanetRest() 
+        public PlanetRest(Planet inputPlanet) 
         {
-            //Constructor
-        }
-        public PlanetRest(Guid id, string name, string type, decimal radius, decimal gravity, Guid starSystemID)
-        {
-            this.id = id;
-            this.name = name;
-            this.type = type;
-            this.radius = radius;
-            this.gravity = gravity;
-
-            this.starSystemID = starSystemID;
+            this.id = inputPlanet.Id;
+            this.name = inputPlanet.Name;
+            this.type = inputPlanet.Type;
+            this.radius = inputPlanet.Radius;
+            this.gravity = inputPlanet.Gravity;
+            this.StarSystemID = inputPlanet.StarSystemID;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Planets.Repository
 
 
 
-        public List<Planet> GetPlanetList()
+        public List<Planet> GetPlanetList() //turn into async, add await
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -43,10 +43,15 @@ namespace Planets.Repository
                         planetList.Add(new Planet(reader.GetGuid(0), reader.GetString(1), reader.GetString(2),
                                                   reader.GetDecimal(3), reader.GetDecimal(4), reader.GetGuid(5)));
                     }
+                    
                     connection.Close();
+                    
                     return planetList;
+                
                 }
+                
                 connection.Close();
+                
                 return null;
             }
         }
@@ -86,11 +91,11 @@ namespace Planets.Repository
                 
                 return null;
             }
-        }
+        } //turn into async, add await
 
 
 
-        public void AddPlanet(Planet inputPlanet) //use Sql Insert Parameters
+        public void AddPlanet(Planet inputPlanet)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -114,7 +119,7 @@ namespace Planets.Repository
                 connection.Close();
 
             }
-        }
+        } //turn into async, add await
 
 
 
@@ -155,7 +160,7 @@ namespace Planets.Repository
 
                 return false;
             }
-        }
+        } //turn into async, add await
 
 
 
@@ -195,6 +200,6 @@ namespace Planets.Repository
 
                 return false;
             }
-        }
+        } //turn into async, add await
     }
 }
