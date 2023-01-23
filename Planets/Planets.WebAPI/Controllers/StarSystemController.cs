@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Planets.WebAPI.Models;
+using Planets.Model;
+using Planets.Service;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.EnterpriseServices;
@@ -6,6 +9,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+
+
 
 namespace Planets.WebAPI.Controllers
 {
@@ -30,7 +35,7 @@ namespace Planets.WebAPI.Controllers
 
                 connection.Open();
 
-                List<StarSystem> starSystemList = new List<StarSystem>();
+                List<StarSystemRest> starSystemList = new List<StarSystemRest>();
 
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -39,11 +44,11 @@ namespace Planets.WebAPI.Controllers
 
                     while (reader.Read())
                     {
-                        StarSystem tempSystem = starSystemList.Find(StarSystem => StarSystem.Id == reader.GetGuid(0));
+                        StarSystemRest tempSystem = starSystemList.Find(StarSystem => StarSystem.Id == reader.GetGuid(0));
 
                         if (tempSystem == null)
                         {
-                            starSystemList.Add(new StarSystem(reader.GetGuid(0), reader.GetString(1)));
+                            starSystemList.Add(new StarSystemRest(reader.GetGuid(0), reader.GetString(1)));
                         }
                     }
 

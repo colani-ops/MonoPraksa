@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Planets.WebAPI.Models;
+using Planets.Service;
+using System;
 using System.Collections.Generic;
 using System.EnterpriseServices;
 using System.Linq;
@@ -8,6 +10,8 @@ using System.Web.Http;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI.WebControls;
+
+
 
 namespace Planets.WebAPI.Controllers
 {
@@ -30,7 +34,7 @@ namespace Planets.WebAPI.Controllers
                     "SELECT * FROM dbo.Planet", connection
                 );
 
-                List<Planet> planetList = new List<Planet>();
+                List<PlanetRest> planetList = new List<PlanetRest>();
 
                 connection.Open();
 
@@ -41,7 +45,7 @@ namespace Planets.WebAPI.Controllers
 
                     while (reader.Read())
                     {
-                        planetList.Add(new Planet(reader.GetGuid(0), reader.GetString(1), reader.GetString(2),
+                        planetList.Add(new PlanetRest(reader.GetGuid(0), reader.GetString(1), reader.GetString(2),
                                                   reader.GetDecimal(3), reader.GetDecimal(4), reader.GetGuid(5)));
                     }
                     connection.Close();
@@ -65,7 +69,7 @@ namespace Planets.WebAPI.Controllers
                 "SELECT * FROM dbo.Planet WHERE Id = '" + targetID + "'", connection
                 );
 
-                List<Planet> planetList = new List<Planet>();
+                List<PlanetRest> planetList = new List<PlanetRest>();
 
                 connection.Open();
 
@@ -76,7 +80,7 @@ namespace Planets.WebAPI.Controllers
 
                     while (reader.Read())
                     {
-                        planetList.Add(new Planet(reader.GetGuid(0), reader.GetString(1), reader.GetString(2),
+                        planetList.Add(new PlanetRest(reader.GetGuid(0), reader.GetString(1), reader.GetString(2),
                                                   reader.GetDecimal(3), reader.GetDecimal(4), reader.GetGuid(5)));
                     }
 
@@ -95,7 +99,7 @@ namespace Planets.WebAPI.Controllers
         // POST: api/Planet/add-planet-to-list
         [HttpPost]
         [Route("api/Planet/add-planet")]
-        public HttpResponseMessage AddPlanet([FromBody] Planet inputPlanet) //use Sql Insert Parameters
+        public HttpResponseMessage AddPlanet([FromBody] PlanetRest inputPlanet) //use Sql Insert Parameters
         {
                 if (inputPlanet.Name == null || inputPlanet.Type == null || inputPlanet.Radius == 0 || inputPlanet.Gravity == 0 || inputPlanet.StarSystemID == null)
                 {
@@ -130,7 +134,7 @@ namespace Planets.WebAPI.Controllers
         // PUT: api/Planet/update-planet-by-id/{TargetID}
         [HttpPut]
         [Route("api/Planet/update-planet-by-id/{targetID}")]
-        public HttpResponseMessage Update(Guid targetID, [FromBody] Planet updatedPlanet)
+        public HttpResponseMessage Update(Guid targetID, [FromBody] PlanetRest updatedPlanet)
         {
             if (updatedPlanet.Id == null || updatedPlanet.Type == null || updatedPlanet.Radius == 0 || updatedPlanet.Gravity == 0 || updatedPlanet.StarSystemID == null)
             {

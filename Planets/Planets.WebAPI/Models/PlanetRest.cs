@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Planets.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Planets.WebAPI
+
+
+namespace Planets.WebAPI.Models
 {
-    public class Planet
+    public class PlanetRest
     {
         private Guid id;
         private string name;
@@ -21,11 +24,11 @@ namespace Planets.WebAPI
         public decimal Radius { get { return radius; }  set { radius = value; } }
         public decimal Gravity { get { return gravity; } set { gravity = value; } }
         public Guid StarSystemID { get { return starSystemID; } set {starSystemID= value; } }
-        public Planet() 
+        public PlanetRest() 
         {
             //Constructor
         }
-        public Planet(Guid id, string name, string type, decimal radius, decimal gravity, Guid starSystemID)
+        public PlanetRest(Guid id, string name, string type, decimal radius, decimal gravity, Guid starSystemID)
         {
             this.id = id;
             this.name = name;

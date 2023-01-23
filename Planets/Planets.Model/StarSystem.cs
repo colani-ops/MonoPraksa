@@ -1,11 +1,15 @@
-﻿using System;
+﻿using Planets.Model.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Planets.WebAPI
+
+
+namespace Planets.Model
 {
-    public class StarSystem
+    public class StarSystem : IStarSystemModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -23,7 +27,5 @@ namespace Planets.WebAPI
             this.Id = Id;
             this.Name = Name;
         }
-
-        
     }
 }

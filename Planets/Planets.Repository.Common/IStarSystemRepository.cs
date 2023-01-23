@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Planets.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
 namespace Planets.Repository.Common
 {
-    public class Class1
+    public interface IStarSystemRepository
     {
     }
 }
