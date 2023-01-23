@@ -76,9 +76,13 @@ namespace Planets.WebAPI.Controllers
             {
                     return Request.CreateResponse(HttpStatusCode.BadRequest, "Check inputed parameters!");
             }
-                
+
+            var Id = Guid.NewGuid();
+
+            inputPlanetRest.Id=Id;
 
             Planet inputPlanet = new Planet(inputPlanetRest.Id, inputPlanetRest.Name, inputPlanetRest.Type, inputPlanetRest.Radius, inputPlanetRest.Gravity, inputPlanetRest.StarSystemID);
+            
             planetService.AddPlanet(inputPlanet);
 
             return Request.CreateResponse(HttpStatusCode.OK, "Successfully added the planet!");

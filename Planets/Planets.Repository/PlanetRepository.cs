@@ -99,7 +99,6 @@ namespace Planets.Repository
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                var id = Guid.NewGuid();
 
                 string commandString = "INSERT INTO dbo.Planet (Id, Name, Type, Radius, Gravity, StarSystemID) VALUES (@Id, @Name, @Type, @Radius, @Gravity, @StarSystemID);";
 
@@ -107,7 +106,7 @@ namespace Planets.Repository
 
                 connection.Open();
 
-                command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.AddWithValue("@Id", inputPlanet.Id);
                 command.Parameters.AddWithValue("@Name", inputPlanet.Name);
                 command.Parameters.AddWithValue("@Type", inputPlanet.Type);
                 command.Parameters.AddWithValue("@Radius", inputPlanet.Radius);

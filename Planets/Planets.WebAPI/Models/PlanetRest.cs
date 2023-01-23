@@ -33,5 +33,11 @@ namespace Planets.WebAPI.Models
             this.gravity = inputPlanet.Gravity;
             this.StarSystemID = inputPlanet.StarSystemID;
         }
+
+        public PlanetRest()
+        {
+
+        }
+
     }
 }

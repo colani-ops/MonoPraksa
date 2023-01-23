@@ -23,10 +23,12 @@ namespace Planets.Model
         public decimal Radius { get { return radius; }  set { radius = value; } }
         public decimal Gravity { get { return gravity; } set { gravity = value; } }
         public Guid StarSystemID { get { return starSystemID; } set {starSystemID= value; } }
-        public Planet() 
+
+        public Planet()
         {
-            //Constructor
+
         }
+
         public Planet(Guid id, string name, string type, decimal radius, decimal gravity, Guid starSystemID)
         {
             this.id = id;
@@ -34,7 +36,6 @@ namespace Planets.Model
             this.type = type;
             this.radius = radius;
             this.gravity = gravity;
-
             this.starSystemID = starSystemID;
         }
     }
