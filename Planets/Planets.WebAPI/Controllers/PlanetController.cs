@@ -99,7 +99,7 @@ namespace Planets.WebAPI.Controllers
         // POST: api/Planet/add-planet-to-list
         [HttpPost]
         [Route("api/Planet/add-planet")]
-        public HttpResponseMessage AddPlanet([FromBody] PlanetRest inputPlanet) //use Sql Insert Parameters
+        public HttpResponseMessage AddPlanet([FromBody] PlanetRest inputPlanet)
         {
                 if (inputPlanet.Name == null || inputPlanet.Type == null || inputPlanet.Radius == 0 || inputPlanet.Gravity == 0 || inputPlanet.StarSystemID == null)
                 {
@@ -108,25 +108,29 @@ namespace Planets.WebAPI.Controllers
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
+
                 var id = Guid.NewGuid();
 
-                    SqlCommand command = new SqlCommand(
-                    "INSERT PA INTO Planet (Id, Name, Type, Radius, Gravity, StarSystemID) VALUES ( '"+inputPlanet.Name+"', '"+inputPlanet.Type+"', "
-                                        +inputPlanet.Radius+", "+inputPlanet.Gravity+", '"+inputPlanet.StarSystemID+"');", connection
-                    );
+                string commandString = "INSERT INTO dbo.Planet (Id, Name, Type, Radius, Gravity, StarSystemID) VALUES (@Id, @Name, @Type, @Radius, @Gravity, @StarSystemID);";
 
-                    connection.Open();
+                SqlCommand command = new SqlCommand(commandString, connection);
 
-                    SqlDataReader reader = command.ExecuteReader();
+                connection.Open();
 
-                    reader.Read();
+                command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.AddWithValue("@Name", inputPlanet.Name);
+                command.Parameters.AddWithValue("@Type", inputPlanet.Type);
+                command.Parameters.AddWithValue("@Radius", inputPlanet.Radius);
+                command.Parameters.AddWithValue("@Gravity", inputPlanet.Gravity);
+                command.Parameters.AddWithValue("@StarSystemID", inputPlanet.StarSystemID);
 
-                    reader.Close();
+                command.ExecuteNonQuery();
 
-                    connection.Close();
+                connection.Close();
+
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK, "Successfully added the planet!");
         }
 
 
@@ -144,10 +148,9 @@ namespace Planets.WebAPI.Controllers
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
 
-                SqlCommand command = new SqlCommand("UPDATE Planet SET Name = '" + updatedPlanet.Name + "', Type = '" + updatedPlanet.Type +
-                                                    "', Radius = " + updatedPlanet.Radius + ", Gravity = " + updatedPlanet.Gravity + ", " +
-                                                    " WHERE Id = '" +targetID+ "';", connection);
-                SqlCommand commandCheck = new SqlCommand("SELECT * FROM Planet WHERE Id = '" + targetID + "';", connection);
+                SqlCommand command = new SqlCommand("UPDATE dbo.Planet SET Name = @Name, Type = @Type, Radius = @Radius, Gravity = @Gravity WHERE Id = '" + targetID + "';", connection);
+
+                SqlCommand commandCheck = new SqlCommand("SELECT * FROM dbo.Planet WHERE Id = '" + targetID + "';", connection);
 
                 connection.Open();
 
@@ -156,12 +159,14 @@ namespace Planets.WebAPI.Controllers
                 if (reader.HasRows)
                 {
                     reader.Close();
-                    
-                    reader = command.ExecuteReader();
-                    
-                    reader.Read();
-                    
-                    reader.Close();
+
+                    command.Parameters.AddWithValue("@Name", updatedPlanet.Name);
+                    command.Parameters.AddWithValue("@Type", updatedPlanet.Type);
+                    command.Parameters.AddWithValue("@Radius", updatedPlanet.Radius);
+                    command.Parameters.AddWithValue("@Gravity", updatedPlanet.Gravity);
+                    command.Parameters.AddWithValue("@StarSystemID", updatedPlanet.StarSystemID);
+
+                    command.ExecuteNonQuery();
                     
                     connection.Close();
 
@@ -180,9 +185,9 @@ namespace Planets.WebAPI.Controllers
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand command = new SqlCommand("DELETE Planet WHERE Id = '" +targetID+ "' ;", connection);
+                SqlCommand command = new SqlCommand("DELETE FROM dbo.Planet WHERE Id = '" +targetID+ "' ;", connection);
                 
-                SqlCommand commandCheck = new SqlCommand("SELECT * FROM Planet WHERE Id = '" + targetID + "' ;", connection);
+                SqlCommand commandCheck = new SqlCommand("SELECT * FROM dbo.Planet WHERE Id = '" + targetID + "' ;", connection);
 
                 connection.Open();
 

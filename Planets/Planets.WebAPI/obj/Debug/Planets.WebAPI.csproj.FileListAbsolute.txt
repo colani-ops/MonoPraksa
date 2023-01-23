@@ -140,3 +140,7 @@ D:\Projects\Mono\MonoPraksa\Planets\Planets.WebAPI\bin\Planets.Model.pdb
 D:\Projects\Mono\MonoPraksa\Planets\Planets.WebAPI\bin\Planets.Service.pdb
 D:\Projects\Mono\MonoPraksa\Planets\Planets.WebAPI\bin\Planets.Model.Common.pdb
 D:\Projects\Mono\MonoPraksa\Planets\Planets.WebAPI\bin\Planets.Service.Common.pdb
+D:\Projects\Mono\MonoPraksa\Planets\Planets.WebAPI\bin\Planets.Repository.dll
+D:\Projects\Mono\MonoPraksa\Planets\Planets.WebAPI\bin\Planets.Repository.Common.dll
+D:\Projects\Mono\MonoPraksa\Planets\Planets.WebAPI\bin\Planets.Repository.pdb
+D:\Projects\Mono\MonoPraksa\Planets\Planets.WebAPI\bin\Planets.Repository.Common.pdb

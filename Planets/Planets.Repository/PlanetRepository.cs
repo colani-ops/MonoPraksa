@@ -96,20 +96,23 @@ namespace Planets.Repository
             {
                 var id = Guid.NewGuid();
 
-                SqlCommand command = new SqlCommand(
-                "INSERT PA INTO Planet (Id, Name, Type, Radius, Gravity, StarSystemID) VALUES ( '" + inputPlanet.Name + "', '" + inputPlanet.Type + "', "
-                                    + inputPlanet.Radius + ", " + inputPlanet.Gravity + ", '" + inputPlanet.StarSystemID + "');", connection
-                );
+                string commandString = "INSERT INTO dbo.Planet (Id, Name, Type, Radius, Gravity, StarSystemID) VALUES (@Id, @Name, @Type, @Radius, @Gravity, @StarSystemID);";
+
+                SqlCommand command = new SqlCommand(commandString, connection);
 
                 connection.Open();
 
-                SqlDataReader reader = command.ExecuteReader();
+                command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.AddWithValue("@Name", inputPlanet.Name);
+                command.Parameters.AddWithValue("@Type", inputPlanet.Type);
+                command.Parameters.AddWithValue("@Radius", inputPlanet.Radius);
+                command.Parameters.AddWithValue("@Gravity", inputPlanet.Gravity);
+                command.Parameters.AddWithValue("@StarSystemID", inputPlanet.StarSystemID);
 
-                reader.Read();
-
-                reader.Close();
+                command.ExecuteNonQuery();
 
                 connection.Close();
+
             }
         }
 
@@ -117,9 +120,7 @@ namespace Planets.Repository
 
         public bool UpdatePlanet(Guid targetID, Planet updatedPlanet)
         {
-            string commandString = "UPDATE Planet SET Name = '" + updatedPlanet.Name + "', Type = '" + updatedPlanet.Type +
-                                   "', Radius = " + updatedPlanet.Radius + ", Gravity = " + updatedPlanet.Gravity + ", " +
-                                   " WHERE Id = '" + targetID + "';";
+            string commandString = "UPDATE dbo.Planet SET Name = @Name, Type = @Type, Radius = @Radius, Gravity = @Gravity WHERE Id = '" + targetID + "';";
 
             string commandStringCheck = "SELECT * FROM Planet WHERE Id = '" + targetID + "';";
 
@@ -136,17 +137,20 @@ namespace Planets.Repository
                 if (reader.HasRows)
                 {
                     reader.Close();
+                    
+                    command.Parameters.AddWithValue("@Name", updatedPlanet.Name);
+                    command.Parameters.AddWithValue("@Type", updatedPlanet.Type);
+                    command.Parameters.AddWithValue("@Radius", updatedPlanet.Radius);
+                    command.Parameters.AddWithValue("@Gravity", updatedPlanet.Gravity);
+                    command.Parameters.AddWithValue("@StarSystemID", updatedPlanet.StarSystemID);
 
-                    reader = command.ExecuteReader();
-
-                    reader.Read();
-
-                    reader.Close();
+                    command.ExecuteNonQuery();
 
                     connection.Close();
 
                     return true;
                 }
+
                 connection.Close();
 
                 return false;
@@ -158,8 +162,8 @@ namespace Planets.Repository
         public bool DeletePlanet(Guid targetID)
         {
 
-            string commandString = "DELETE Planet WHERE Id = '" + targetID + "' ;";
-            string commandStringCheck = "SELECT * FROM Planet WHERE Id = '" + targetID + "' ;";
+            string commandString = "DELETE FROM dbo.Planet WHERE Id = '" + targetID + "' ;";
+            string commandStringCheck = "SELECT * FROM dbo.Planet WHERE Id = '" + targetID + "' ;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
