@@ -20,7 +20,6 @@ namespace Planets.Repository
 
 
 
-        //Get Planet List
         public List<Planet> Get()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -54,7 +53,6 @@ namespace Planets.Repository
 
 
 
-        // GET: api/Planet/search-planet-id/{targetID}
         public Planet SearchPlanetId(Guid targetID)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -92,7 +90,6 @@ namespace Planets.Repository
 
 
 
-        // POST: api/Planet/add-planet-to-list
         public void AddPlanet(Planet inputPlanet) //use Sql Insert Parameters
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -118,7 +115,6 @@ namespace Planets.Repository
 
 
 
-        // PUT: api/Planet/update-planet-by-id/{TargetID}
         public bool UpdatePlanet(Guid targetID, Planet updatedPlanet)
         {
             string commandString = "UPDATE Planet SET Name = '" + updatedPlanet.Name + "', Type = '" + updatedPlanet.Type +
@@ -157,7 +153,8 @@ namespace Planets.Repository
             }
         }
 
-        // DELETE: api/Planet/delete-by-id/{targetID}
+
+
         public bool DeletePlanet(Guid targetID)
         {
 
