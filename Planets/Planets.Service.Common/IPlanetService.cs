@@ -11,10 +11,10 @@ namespace Planets.Service.Common
 {
     public interface IPlanetService
     {
-        List<Planet> GetPlanetList(); 
-        Planet SearchPlanetId(Guid targetID);
-        void AddPlanet(Planet inputPlanet);
-        bool UpdatePlanet(Guid targetId, Planet updatedPlanet);
-        bool DeletePlanet(Guid targetId);
+        Task<List<Planet>> GetPlanetListAsync(); 
+        Task<Planet> SearchPlanetIdAsync(Guid targetID);
+        Task AddPlanetAsync(Planet inputPlanet);
+        Task <bool> UpdatePlanetAsync(Guid targetId, Planet updatedPlanet);
+        Task <bool> DeletePlanetAsync(Guid targetId);
     }
 }

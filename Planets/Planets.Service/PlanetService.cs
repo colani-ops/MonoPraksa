@@ -13,31 +13,32 @@ namespace Planets.Service
 {
     public class PlanetService : IPlanetService
     {
+
         PlanetRepository planetRepository = new PlanetRepository();
 
-        public List<Planet> GetPlanetList() //turn into async, add await
-        {
-            return planetRepository.GetPlanetList();
+        public async Task<List<Planet>> GetPlanetListAsync()
+        { 
+            return await planetRepository.GetPlanetListAsync();
         }
 
-        public Planet SearchPlanetId(Guid targetID) //turn into async, add await
+        public async Task<Planet> SearchPlanetIdAsync(Guid targetID)
         {
-            return planetRepository.SearchPlanetId(targetID);
+            return await planetRepository.SearchPlanetIdAsync(targetID);
         }
 
-        public void AddPlanet(Planet inputPlanet) //turn into async, add await
+        public async Task AddPlanetAsync(Planet inputPlanet)
         {
-            planetRepository.AddPlanet(inputPlanet);
+            await planetRepository.AddPlanetAsync(inputPlanet);
         }
 
-        public bool UpdatePlanet(Guid targetId, Planet updatedPlanet) //turn into async, add await
+        public async Task <bool> UpdatePlanetAsync(Guid targetId, Planet updatedPlanet)
         {
-            return planetRepository.UpdatePlanet(targetId, updatedPlanet);
+            return await planetRepository.UpdatePlanetAsync(targetId, updatedPlanet);
         }
 
-        public bool DeletePlanet(Guid targetId) //turn into async, add await
+        public async Task<bool> DeletePlanetAsync(Guid targetId)
         {
-            return planetRepository.DeletePlanet(targetId);
+            return await planetRepository.DeletePlanetAsync(targetId);
         }
 
     }

@@ -11,8 +11,7 @@ using System.Web.Http;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI.WebControls;
-
-
+using System.Threading.Tasks;
 
 namespace Planets.WebAPI.Controllers
 {
@@ -27,9 +26,9 @@ namespace Planets.WebAPI.Controllers
         // GET: api/Planet/get-planet-list
         [HttpGet]
         [Route("api/Planet/get-planet-list")]
-        public HttpResponseMessage GetPlanetList()
+        public async Task<HttpResponseMessage> GetPlanetListAsync()
         {
-            List<Planet> planetList = planetService.GetPlanetList();
+            List<Planet> planetList = await planetService.GetPlanetListAsync();
 
             List<PlanetRest> planetRestList = new List<PlanetRest>();
 
@@ -50,10 +49,10 @@ namespace Planets.WebAPI.Controllers
         // GET: api/Planet/search-planet-id/{targetID}
         [HttpGet]
         [Route("api/Planet/search-planet-id/{targetID}")]
-        public HttpResponseMessage SearchPlanetId(Guid targetID)
+        public async Task<HttpResponseMessage> SearchPlanetIdAsync(Guid targetID)
         {
 
-            Planet targetPlanet = planetService.SearchPlanetId(targetID);
+            Planet targetPlanet = await planetService.SearchPlanetIdAsync(targetID);
 
             PlanetRest targetPlanetRest = new PlanetRest(targetPlanet);
 
@@ -69,7 +68,7 @@ namespace Planets.WebAPI.Controllers
         // POST: api/Planet/add-planet
         [HttpPost]
         [Route("api/Planet/add-planet")]
-        public HttpResponseMessage AddPlanet([FromBody] PlanetRest inputPlanetRest)
+        public async Task<HttpResponseMessage> AddPlanetAsync([FromBody] PlanetRest inputPlanetRest)
         {
             //Could turn this into a seperate method
             if (inputPlanetRest.Name == null || inputPlanetRest.Type == null || inputPlanetRest.Radius == 0 || inputPlanetRest.Gravity == 0 || inputPlanetRest.StarSystemID == null)
@@ -83,7 +82,7 @@ namespace Planets.WebAPI.Controllers
 
             Planet inputPlanet = new Planet(inputPlanetRest.Id, inputPlanetRest.Name, inputPlanetRest.Type, inputPlanetRest.Radius, inputPlanetRest.Gravity, inputPlanetRest.StarSystemID);
             
-            planetService.AddPlanet(inputPlanet);
+            await planetService.AddPlanetAsync(inputPlanet);
 
             return Request.CreateResponse(HttpStatusCode.OK, "Successfully added the planet!");
         }
@@ -93,7 +92,7 @@ namespace Planets.WebAPI.Controllers
         // PUT: api/Planet/update-planet-by-id/{targetID}
         [HttpPut]
         [Route("api/Planet/update-planet-by-id/{targetID}")]
-        public HttpResponseMessage Update(Guid targetID, [FromBody] PlanetRest updatedPlanetRest)
+        public async Task<HttpResponseMessage> UpdateAsync(Guid targetID, [FromBody] PlanetRest updatedPlanetRest)
         {
             //Could turn this into a seperate method
             if (updatedPlanetRest.Id == null || updatedPlanetRest.Type == null || updatedPlanetRest.Radius == 0 || updatedPlanetRest.Gravity == 0 || updatedPlanetRest.StarSystemID == null)
@@ -103,7 +102,7 @@ namespace Planets.WebAPI.Controllers
 
             Planet updatedPlanet = new Planet(updatedPlanetRest.Id, updatedPlanetRest.Name, updatedPlanetRest.Name, updatedPlanetRest.Radius, updatedPlanetRest.Gravity, updatedPlanetRest.StarSystemID);
             
-            if (planetService.UpdatePlanet(targetID, updatedPlanet))
+            if (await planetService.UpdatePlanetAsync(targetID, updatedPlanet))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, "Update Successful!");
             }
@@ -115,10 +114,10 @@ namespace Planets.WebAPI.Controllers
         // DELETE: api/Planet/delete-by-id/{targetID}
         [HttpDelete]
         [Route("api/Planet/delete-planet-by-id/{targetID}")]
-        public HttpResponseMessage Delete(Guid targetID)
+        public async Task <HttpResponseMessage> DeleteAsync(Guid targetID)
         {
 
-            if (planetService.DeletePlanet(targetID))
+            if (await planetService.DeletePlanetAsync(targetID))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, "Deletion successful!");
             }

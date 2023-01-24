@@ -20,7 +20,7 @@ namespace Planets.Repository
 
 
 
-        public List<Planet> GetPlanetList() //turn into async, add await
+        public async Task<List<Planet>> GetPlanetListAsync()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -31,34 +31,37 @@ namespace Planets.Repository
 
                 List<Planet> planetList = new List<Planet>();
 
-                connection.Open();
+                await connection.OpenAsync();
 
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader readerAsync = await command.ExecuteReaderAsync();
 
-                if (reader.HasRows)
+                if (readerAsync.HasRows)
                 {
 
-                    while (reader.Read())
+                    while (readerAsync.Read())
                     {
-                        planetList.Add(new Planet(reader.GetGuid(0), reader.GetString(1), reader.GetString(2),
-                                                  reader.GetDecimal(3), reader.GetDecimal(4), reader.GetGuid(5)));
+
+                        planetList.Add(new Planet(readerAsync.GetGuid(0), readerAsync.GetString(1), readerAsync.GetString(2),
+                                                  readerAsync.GetDecimal(3), readerAsync.GetDecimal(4), readerAsync.GetGuid(5)));
                     }
                     
                     connection.Close();
-                    
+                    readerAsync.Close();
+
                     return planetList;
                 
                 }
                 
                 connection.Close();
-                
+                readerAsync.Close();
+
                 return null;
             }
         }
 
 
 
-        public Planet SearchPlanetId(Guid targetID)
+        public async Task<Planet> SearchPlanetIdAsync(Guid targetID)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -69,20 +72,21 @@ namespace Planets.Repository
 
                 Planet tempPlanet = new Planet();
 
-                connection.Open();
+                await connection.OpenAsync();
 
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader readerAsync = await command.ExecuteReaderAsync();
 
-                if (reader.HasRows)
+                if (readerAsync.HasRows)
                 {
 
-                    while (reader.Read())
+                    while (readerAsync.Read())
                     {
-                        tempPlanet = new Planet(reader.GetGuid(0), reader.GetString(1), reader.GetString(2),
-                                                  reader.GetDecimal(3), reader.GetDecimal(4), reader.GetGuid(5));
+                        tempPlanet = new Planet(readerAsync.GetGuid(0), readerAsync.GetString(1), readerAsync.GetString(2),
+                                                  readerAsync.GetDecimal(3), readerAsync.GetDecimal(4), readerAsync.GetGuid(5));
                     }
 
                     connection.Close();
+
                     return tempPlanet;
 
                 }
@@ -91,11 +95,11 @@ namespace Planets.Repository
                 
                 return null;
             }
-        } //turn into async, add await
+        }
 
 
 
-        public void AddPlanet(Planet inputPlanet)
+        public async Task AddPlanetAsync(Planet inputPlanet)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -104,7 +108,7 @@ namespace Planets.Repository
 
                 SqlCommand command = new SqlCommand(commandString, connection);
 
-                connection.Open();
+                await connection.OpenAsync();
 
                 command.Parameters.AddWithValue("@Id", inputPlanet.Id);
                 command.Parameters.AddWithValue("@Name", inputPlanet.Name);
@@ -113,16 +117,16 @@ namespace Planets.Repository
                 command.Parameters.AddWithValue("@Gravity", inputPlanet.Gravity);
                 command.Parameters.AddWithValue("@StarSystemID", inputPlanet.StarSystemID);
 
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
 
                 connection.Close();
 
             }
-        } //turn into async, add await
+        }
 
 
 
-        public bool UpdatePlanet(Guid targetID, Planet updatedPlanet)
+        public async Task <bool> UpdatePlanetAsync(Guid targetID, Planet updatedPlanet)
         {
             string commandString = "UPDATE dbo.Planet SET Name = @Name, Type = @Type, Radius = @Radius, Gravity = @Gravity WHERE Id = '" + targetID + "';";
 
@@ -134,13 +138,13 @@ namespace Planets.Repository
                 SqlCommand command = new SqlCommand(commandString, connection);
                 SqlCommand commandCheck = new SqlCommand(commandStringCheck, connection);
 
-                connection.Open();
+                await connection.OpenAsync();
 
-                SqlDataReader reader = commandCheck.ExecuteReader();
+                SqlDataReader readerAsync = await commandCheck.ExecuteReaderAsync();
 
-                if (reader.HasRows)
+                if (readerAsync.HasRows)
                 {
-                    reader.Close();
+                    readerAsync.Close();
                     
                     command.Parameters.AddWithValue("@Name", updatedPlanet.Name);
                     command.Parameters.AddWithValue("@Type", updatedPlanet.Type);
@@ -148,22 +152,26 @@ namespace Planets.Repository
                     command.Parameters.AddWithValue("@Gravity", updatedPlanet.Gravity);
                     command.Parameters.AddWithValue("@StarSystemID", updatedPlanet.StarSystemID);
 
-                    command.ExecuteNonQuery();
+                    await command.ExecuteNonQueryAsync();
+
+                    readerAsync.Close();
 
                     connection.Close();
 
                     return true;
                 }
 
+                readerAsync.Close();
+
                 connection.Close();
 
                 return false;
             }
-        } //turn into async, add await
+        }
 
 
 
-        public bool DeletePlanet(Guid targetID)
+        public async Task <bool> DeletePlanetAsync(Guid targetID)
         {
 
             string commandString = "DELETE FROM dbo.Planet WHERE Id = '" + targetID + "' ;";
@@ -175,19 +183,19 @@ namespace Planets.Repository
 
                 SqlCommand commandCheck = new SqlCommand(commandStringCheck, connection);
 
-                connection.Open();
+                await connection.OpenAsync();
 
-                SqlDataReader reader = commandCheck.ExecuteReader();
+                SqlDataReader readerAsync = await commandCheck.ExecuteReaderAsync();
 
-                if (reader.HasRows)
+                if (readerAsync.HasRows)
                 {
-                    reader.Close();
+                    readerAsync.Close();
 
-                    reader = command.ExecuteReader();
+                    readerAsync = await command.ExecuteReaderAsync();
 
-                    reader.Read();
+                    readerAsync.Read();
 
-                    reader.Close();
+                    readerAsync.Close();
 
                     connection.Close();
 
@@ -195,10 +203,12 @@ namespace Planets.Repository
 
                 }
 
+                readerAsync.Close();
+
                 connection.Close();
 
                 return false;
             }
-        } //turn into async, add await
+        }
     }
 }

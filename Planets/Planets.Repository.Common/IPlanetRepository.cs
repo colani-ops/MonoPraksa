@@ -11,11 +11,11 @@ namespace Planets.Repository.Common
 {
     public interface IPlanetRepository
     {
-        List<Planet> GetPlanetList();
-        Planet SearchPlanetId(Guid targetId);
-        void AddPlanet(Planet inputPlanet);
-        bool UpdatePlanet(Guid targetID, Planet updatedPlanet);
-        bool DeletePlanet(Guid targetID);
+        Task<List<Planet>> GetPlanetListAsync();
+        Task<Planet> SearchPlanetIdAsync(Guid targetId);
+        Task AddPlanetAsync(Planet inputPlanet);
+        Task<bool> UpdatePlanetAsync(Guid targetID, Planet updatedPlanet);
+        Task<bool> DeletePlanetAsync(Guid targetID);
 
     }
 }
