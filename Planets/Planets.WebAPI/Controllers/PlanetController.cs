@@ -20,8 +20,7 @@ namespace Planets.WebAPI.Controllers
 
         //string connectionString = "server = localhost; database = Planets; trusted_connection=true";
 
-        PlanetService planetService = new PlanetService();
-
+        PlanetService planetService;
 
         // GET: api/Planet/get-planet-list
         [HttpGet]

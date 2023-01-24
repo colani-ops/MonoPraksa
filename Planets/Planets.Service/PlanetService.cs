@@ -14,7 +14,7 @@ namespace Planets.Service
     public class PlanetService : IPlanetService
     {
 
-        PlanetRepository planetRepository = new PlanetRepository();
+        PlanetRepository planetRepository;
 
         public async Task<List<Planet>> GetPlanetListAsync()
         { 
