@@ -1,6 +1,8 @@
 ﻿using Planets.Model;
 using Planets.Service.Common;
 using Planets.Repository;
+using Planets.Repository.Common;
+using Planets.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +15,17 @@ namespace Planets.Service
 {
     public class PlanetService : IPlanetService
     {
+        protected IPlanetRepository planetRepository { get; private set; }
+        public PlanetService (IPlanetRepository planetRepository)
+        {
+            this.planetRepository = planetRepository;
+        }
 
-        PlanetRepository planetRepository;
 
-        public async Task<List<Planet>> GetPlanetListAsync()
+
+        public async Task<List<Planet>> GetPlanetListAsync(PlanetFilter planetFilter, Paging paging, Sorting sorting)
         { 
-            return await planetRepository.GetPlanetListAsync();
+            return await planetRepository.GetPlanetListAsync(planetFilter, paging, sorting);
         }
 
         public async Task<Planet> SearchPlanetIdAsync(Guid targetID)

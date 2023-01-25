@@ -1,6 +1,7 @@
 ﻿using Planets.WebAPI.Models;
 using Planets.Service;
 using Planets.Model;
+using Planets.Common;
 using System;
 using System.Collections.Generic;
 using System.EnterpriseServices;
@@ -12,22 +13,30 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI.WebControls;
 using System.Threading.Tasks;
+using Planets.Service.Common;
 
 namespace Planets.WebAPI.Controllers
 {
     public class PlanetController : ApiController
     {
+        protected IPlanetService planetService { get; private set; }
+        public PlanetController(IPlanetService planetService)
+        {
+            this.planetService = planetService;
+        }
 
-        //string connectionString = "server = localhost; database = Planets; trusted_connection=true";
 
-        PlanetService planetService;
 
         // GET: api/Planet/get-planet-list
         [HttpGet]
         [Route("api/Planet/get-planet-list")]
-        public async Task<HttpResponseMessage> GetPlanetListAsync()
+        public async Task<HttpResponseMessage> GetPlanetListAsync(Guid planetType,string planetName, decimal planetRadius, decimal planetGravity, int pageSize, int pageNumber, string orderBy, string orderMode)
         {
-            List<Planet> planetList = await planetService.GetPlanetListAsync();
+            PlanetFilter planetFilter = new PlanetFilter(planetType, planetName, planetRadius, planetGravity);
+            Paging paging = new Paging(pageSize, pageNumber);
+            Sorting sorting = new Sorting(orderBy, orderMode);
+
+            List<Planet> planetList = await planetService.GetPlanetListAsync(planetFilter, paging, sorting);
 
             List<PlanetRest> planetRestList = new List<PlanetRest>();
 

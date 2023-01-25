@@ -1,4 +1,5 @@
 ﻿using Planets.Model;
+using Planets.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Planets.Repository.Common
 {
     public interface IPlanetRepository
     {
-        Task<List<Planet>> GetPlanetListAsync();
+        Task<List<Planet>> GetPlanetListAsync(PlanetFilter planetFilter, Paging paging, Sorting sorting);
         Task<Planet> SearchPlanetIdAsync(Guid targetId);
         Task AddPlanetAsync(Planet inputPlanet);
         Task<bool> UpdatePlanetAsync(Guid targetID, Planet updatedPlanet);

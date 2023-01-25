@@ -1,5 +1,6 @@
 ﻿using Planets.Model;
 using Planets.Repository.Common;
+using Planets.Common;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -20,14 +21,50 @@ namespace Planets.Repository
 
 
 
-        public async Task<List<Planet>> GetPlanetListAsync()
+        public async Task<List<Planet>> GetPlanetListAsync(PlanetFilter planetFilter, Paging paging, Sorting sorting)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
 
+                string commandString = "SELECT * FROM dbo.Planet";
+                
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append(commandString);
+                
+                
+                if(planetFilter.PlanetType != null || planetFilter.PlanetGravity != null || planetFilter.PlanetRadius != null)
+                {
+                    stringBuilder.Append(" WHERE Id != null");
+
+                    if(planetFilter.PlanetType != null)
+                    {
+                        stringBuilder.Append(" AND Type = " + planetFilter.PlanetType);
+                    }
+                    if(planetFilter.PlanetGravity != null)
+                    {
+                        stringBuilder.Append(" AND Gravity BETWEEN 0 AND "+planetFilter.PlanetGravity);
+                    }
+                    if(planetFilter.PlanetRadius != null)
+                    {
+                        stringBuilder.Append(" AND Radius BETWEEN 0 AND " + planetFilter.PlanetRadius);
+                    }
+                }
+
+                int offset = (paging.PageNumber - 1) * paging.PageSize;
+                if(paging.PageNumber != 0 || paging.PageSize != 0)
+                { 
+                    stringBuilder.Append(" ORDER BY " + sorting.OrderBy + " " + sorting.OrderMode);
+                    stringBuilder.Append(" OFFSET " + offset + " ROWS ");
+                    stringBuilder.AppendLine(" FETCH NEXT " + paging.PageSize + " ROWS ONLY");
+                }
+
+                stringBuilder.Append(";");
+
                 SqlCommand command = new SqlCommand(
-                    "SELECT * FROM dbo.Planet", connection
+                commandString, connection
                 );
+
+                commandString = stringBuilder.ToString();
 
                 List<Planet> planetList = new List<Planet>();
 
