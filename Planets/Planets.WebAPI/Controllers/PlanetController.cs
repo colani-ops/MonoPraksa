@@ -30,7 +30,7 @@ namespace Planets.WebAPI.Controllers
         // GET: api/Planet/get-planet-list
         [HttpGet]
         [Route("api/Planet/get-planet-list")]
-        public async Task<HttpResponseMessage> GetPlanetListAsync(Guid planetType,string planetName, decimal planetRadius, decimal planetGravity, int pageSize, int pageNumber, string orderBy, string orderMode)
+        public async Task<HttpResponseMessage> GetPlanetListAsync(Guid? planetType, string planetName, decimal? planetRadius, decimal? planetGravity, int pageSize, int pageNumber, string orderBy, string orderMode)
         {
             PlanetFilter planetFilter = new PlanetFilter(planetType, planetName, planetRadius, planetGravity);
             Paging paging = new Paging(pageSize, pageNumber);

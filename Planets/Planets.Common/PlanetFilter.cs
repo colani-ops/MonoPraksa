@@ -21,7 +21,7 @@ namespace Planets.Common
             //Empty Constructor
         }
 
-        public PlanetFilter(Guid PlanetType, string PlanetName, decimal PlanetRadius, decimal PlanetGravity)
+        public PlanetFilter(Guid? PlanetType, string PlanetName, decimal? PlanetRadius, decimal? PlanetGravity)
         {
             this.PlanetType = PlanetType;
             this.PlanetName = PlanetName;
