@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<title>
+    MonoPlanets
+</title>
+
+<head>
+    <head>
+        <title>Bootstrap Example</title>
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+            <script src = "Planets.js"></script>
+        </head>
+</head>
+
+<body>
+    <div class = "jumbotron text-center">
+        <div class = "container">
+                <div class = "row">
+                    <div class = "col-sm-4">
+                        <img src = "colaniops.png" class ="img-fluid" width = "100">
+                    </div>
+                    <div class = "col-sm-3">
+                        <h1 class = "text-center">Planet Library</h1>
+                        <small class = "text-center">#MonoPraksa made me do it</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <div class="container-fluid">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Login</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Register</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="#">Planets</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Star Systems</a>
+                </li>
+              </ul>
+            </div>
+        </nav>
+
+
+
+    <div class = "container">
+        <p>
+            <h6>
+                Welcome to Nikola's planet list :]
+            </h6>
+        </p>
+    </div>
+
+
+
+    <div class="container">
+        <table class = "table table-striped table-responsive" id="table1">
+            <thread>
+                <tr>
+                    <th>(Placeholder, pictures go below)</th>
+                    <th>Planet ID</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Radius</th>
+                    <th>Gravity</th>
+                    <th>Star</th>
+                </tr>
+            </thread>
+            <thbody>
+                <td>
+                    <label for = planetPicture></label>
+                </td>
+                <td>
+                    <label for = planetId></label>
+                    <input type = "number" name = "planetId" id = "planetId" required>
+                </td>
+                <td>
+                    <label for = planetName></label>
+                    <input type = "text" name="planetName" id = "planetName" required>
+                </td>
+                <td>
+                    <label for = planetType></label>
+                    <input type = "text" name = "planetType" id = "planetType" required>
+                </td>
+                <td>
+                    <label for = planetType></label>
+                    <input type = "number" name = "planetRadius" id = "planetGravity" required>
+                </td>
+                <td>
+                    <label for = planetType></label>
+                    <input type = "number" name = "planetGravity" id = "planetGravity" required>
+                </td>
+                <td>
+                    <label for = planetType></label>
+                    <input type = "text" name = "planetStar" id = "planetStar" required>
+                </td>
+            </thbody>
+        </table>
+    </div>
+
+    <div class = "grid-ontainer" id="below">
+    </div>
+
+    <script>
+        var planetLister = new EventSource("/Planets.Js");
+        planetLister.onopen = ListPlanets();
+    </script>
+
+
+</body>
+
+
+
+
+</html>
