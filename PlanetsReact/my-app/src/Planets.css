@@ -1,0 +1,57 @@
+.Planets {
+  text-align: center;
+}
+
+.Planets-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.Planets-image {
+  height: 10vmin;
+}
+
+.table-container{
+  text-align: right;
+  border: 2px solid;
+  width: 60%;
+}
+
+.table-container-tr{
+  height: 70px;
+  width: 50%;
+  border: 3px solid;
+}
+
+
+
+
+@media (prefers-reduced-motion: no-preference) {
+  .Planets-logo {
+    animation: Planets-logo-spin infinite 20s linear;
+  }
+}
+
+.Planets-header {
+  background-color: #7b7697;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.Planets-link {
+  color: #fbbd61;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

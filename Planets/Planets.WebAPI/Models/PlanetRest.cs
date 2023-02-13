@@ -17,6 +17,7 @@ namespace Planets.WebAPI.Models
         private decimal gravity;
 
         private Guid starSystemID;
+        //private string starName;
 
         public Guid Id { get { return id; } set { id = value; } }
         public string Name { get { return name; } set { name = value; } }
@@ -24,6 +25,8 @@ namespace Planets.WebAPI.Models
         public decimal Radius { get { return radius; }  set { radius = value; } }
         public decimal Gravity { get { return gravity; } set { gravity = value; } }
         public Guid StarSystemID { get { return starSystemID; } set {starSystemID= value; } }
+        //public string StarName { get { return starName; } set { starName = value; } }
+
         public PlanetRest(Planet inputPlanet) 
         {
             this.id = inputPlanet.Id;
@@ -32,6 +35,7 @@ namespace Planets.WebAPI.Models
             this.radius = inputPlanet.Radius;
             this.gravity = inputPlanet.Gravity;
             this.StarSystemID = inputPlanet.StarSystemID;
+            //this.starName = inputPlanet.StarName;
         }
 
         public PlanetRest()

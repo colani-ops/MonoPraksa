@@ -9,8 +9,8 @@ namespace Planets.Common
     public class Paging
     {
 
-        public int PageSize;
-        public int PageNumber;
+        public int? PageSize;
+        public int? PageNumber;
 
         public Paging() //Default constructor
         {
@@ -18,7 +18,7 @@ namespace Planets.Common
             this.PageNumber = 1;
         }
 
-        public Paging(int PageSize, int PageNumber)
+        public Paging(int? PageSize, int? PageNumber)
         {
             this.PageSize = PageSize;
             this.PageNumber = PageNumber;

@@ -2,16 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
-import AppCustom from './AppCustom';
-import LoginForm from './LoginForm';
-import Clocky from './Clock';
+import Planets from './Planets';
+
 
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const appCustom = <AppCustom />;
+const planets = <Planets />;
 
-root.render(appCustom);
+root.render(planets);
 
 
 // If you want to start measuring performance in your app, pass a function

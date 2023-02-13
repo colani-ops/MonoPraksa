@@ -50,7 +50,7 @@ namespace Planets.Repository
                     }
                 }
 
-                int offset = (paging.PageNumber - 1) * paging.PageSize;
+                int? offset = (paging.PageNumber - 1) * paging.PageSize;
                 if(paging.PageNumber != 0 || paging.PageSize != 0)
                 { 
                     stringBuilder.Append(" ORDER BY " + sorting.OrderBy + " " + sorting.OrderMode);

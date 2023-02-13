@@ -30,7 +30,7 @@ namespace Planets.WebAPI.Controllers
         // GET: api/Planet/get-planet-list
         [HttpGet]
         [Route("api/Planet/get-planet-list")]
-        public async Task<HttpResponseMessage> GetPlanetListAsync(Guid? planetType, string planetName, decimal? planetRadius, decimal? planetGravity, int pageSize, int pageNumber, string orderBy, string orderMode)
+        public async Task<HttpResponseMessage> GetPlanetListAsync([FromUri]Guid? planetType, [FromUri] string planetName, [FromUri]decimal? planetRadius, [FromUri]decimal? planetGravity, [FromUri]int? pageSize, [FromUri]int? pageNumber, [FromUri]string orderBy, [FromUri]string orderMode)
         {
             PlanetFilter planetFilter = new PlanetFilter(planetType, planetName, planetRadius, planetGravity);
             Paging paging = new Paging(pageSize, pageNumber);
@@ -57,7 +57,7 @@ namespace Planets.WebAPI.Controllers
         // GET: api/Planet/search-planet-id/{targetID}
         [HttpGet]
         [Route("api/Planet/search-planet-id/{targetID}")]
-        public async Task<HttpResponseMessage> SearchPlanetIdAsync(Guid targetID)
+        public async Task<HttpResponseMessage> SearchPlanetIdAsync([FromUri]Guid targetID)
         {
 
             Planet targetPlanet = await planetService.SearchPlanetIdAsync(targetID);
